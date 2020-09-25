@@ -76,10 +76,11 @@ class _LandingState extends State<Landing>{
                 left: 0,
                 right: 0,
                 child: Center(
-                  child: Text("Spaced",
+                  child: Text("SmartShop",
                     style: TextStyle(
                         fontFamily: 'Raleway',
                         fontSize: 44.0,
+                        fontWeight: FontWeight.w500,
                         color: Colors.white)),
               )),
               ],
