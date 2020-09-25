@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
               print(payload);
               print(str);
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
-                return Review(str, payload);
+                //return Review(str, payload);
               } else {
                 return Landing();
               }

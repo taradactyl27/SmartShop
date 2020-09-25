@@ -162,7 +162,7 @@ class _LandingState extends State<Landing>{
                         Navigator.push(
                           context,
                            MaterialPageRoute(
-                             builder: (context) => Review.fromBase64(res)
+                            // builder: (context) => Review.fromBase64(res)
                            )
                         );
                       }
