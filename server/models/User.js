@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
     // link position
-    id: Number,
+    id: String,
     name: String,
     email: String,
     password: String

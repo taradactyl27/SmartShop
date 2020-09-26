@@ -7,6 +7,7 @@ var GraphQlInputObjectType = require('graphql').GraphQLInputObjectType;
 var GraphQLID = require('graphql').GraphQLID;
 var GraphQLString = require('graphql').GraphQLString;
 var GraphQLInt = require('graphql').GraphQLInt;
+const { GraphQLFloat } = require('graphql');
 var GraphQLDate = require('graphql-date');
 var {ItemModel} = require('../models/Item');
 var {qrModel} = require('../models/QRCode');
@@ -17,7 +18,7 @@ var userType = new GraphQLObjectType({
     name: 'user',
     fields: () => ({
             id: {
-                type: GraphQLInt
+                type: GraphQLString
             },
             name: {
                 type: GraphQLString
@@ -30,6 +31,45 @@ var userType = new GraphQLObjectType({
             }
     }),
 });
+
+var itemType = new GraphQLObjectType({
+    // link position[] scale
+    name: 'item',
+    fields: () => ({
+            id: {
+                type: GraphQLString
+            },
+            name: {
+                type: GraphQLString
+            },
+            Price: {
+                type: GraphQLFloat
+            },
+            picture: {
+                type: GraphQLString
+            },
+            stock: {
+                type: GraphQLInt
+            },
+            desc: {
+                type: GraphQLString
+            }
+    }),
+});
+
+var qrType = new GraphQLObjectType({
+    // link position[] scale
+    name: 'qr',
+    fields: () => ({
+            id: {
+                type: GraphQLString
+            },
+            value: {
+                type: GraphQLString
+            }
+    }),
+});
+
 
 var queryType = new GraphQLObjectType({
     name: 'Query',
@@ -50,7 +90,42 @@ var queryType = new GraphQLObjectType({
                     }
                     return userDetails
                 }
-            }
+            },
+
+            item: {
+                type: itemType,
+                args: {
+                    id: {
+                        name: '_id',
+                        type: GraphQLString
+                    }
+                },
+                resolve: function (root, params) {
+                    const itemDetails = ItemModel.findById(params.id).exec()
+                    if (!itemDetails) {
+                        throw new Error('Error')
+                    }
+                    return itemDetails
+                }
+            },
+
+            qr: {
+                type: qrType,
+                args: {
+                    id: {
+                        name: '_id',
+                        type: GraphQLString
+                    }
+                },
+                resolve: function (root, params) {
+                    const qrDetails = qrModel.findById(params.id).exec()
+                    if (!itemDetails) {
+                        throw new Error('Error')
+                    }
+                    return qrDetails
+                }
+            },
+
         }
     }
 });
@@ -80,7 +155,54 @@ var mutation = new GraphQLObjectType({
                     }
                     return newUser
                 }
-            }
+            },
+
+            addItem: {
+                type: itemType,
+                args: {
+                    name: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    },
+                    price: {
+                        type: new GraphQLNonNull(GraphQLFloat)
+                    },
+                    picture: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    },
+                    stock: {
+                        type: new GraphQLNonNull(GraphQLInt)
+                    },
+                    desc: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    }
+                },
+                resolve: function (root, params) {
+                    const itemModel = new ItemModel(params);
+                    const newItem = itemModel.save();
+                    if (!newItem) {
+                        throw new Error('Error');
+                    }
+                    return newItem
+                }
+            },
+
+            addQR: {
+                type: qrType,
+                args: {
+                    value: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    }
+                },
+                resolve: function (root, params) {
+                    const QRModel = new qrModel(params);
+                    const qrUser = QRModel.save();
+                    if (!qrUser) {
+                        throw new Error('Error');
+                    }
+                    return qrUser
+                }
+            },
+
         }
     }
 });
