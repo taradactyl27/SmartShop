@@ -5,8 +5,9 @@ var itemSchema = new mongoose.Schema({
     name: String,
     price: Number,
     picture: String,
-    stock: Number,
-    desc: String
+    stock: [Number],
+    desc: String,
+    color: String
 });
 
 module.exports = {

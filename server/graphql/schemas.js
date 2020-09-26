@@ -49,9 +49,12 @@ var itemType = new GraphQLObjectType({
                 type: GraphQLString
             },
             stock: {
-                type: GraphQLInt
+                type: GraphQLList(GraphQLInt)
             },
             desc: {
+                type: GraphQLString
+            },
+            color: {
                 type: GraphQLString
             }
     }),
@@ -170,9 +173,12 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     stock: {
-                        type: new GraphQLNonNull(GraphQLInt)
+                        type: new GraphQLNonNull(GraphQLList(GraphQLInt))
                     },
                     desc: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    },
+                    color: {
                         type: new GraphQLNonNull(GraphQLString)
                     }
                 },
