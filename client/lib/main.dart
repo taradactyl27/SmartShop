@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import './screens/Landing.dart';
+import './screens/ProductPage.dart';
 import './screens/Review.dart';
+import './screens/MainCart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert' show json, base64, ascii;
 
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     print("RUNNING");
     return MaterialApp(
-      title: 'Spacer',
+      title: 'SmartShop',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -33,7 +35,8 @@ class MyApp extends StatelessWidget {
             var str = snapshot.data;
             var jwt = str.split(".");
             if(jwt.length !=3) {
-              return Landing();
+              return ProductPage();
+              return MainCart();
             } else {
               var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
               print(payload);
@@ -41,11 +44,11 @@ class MyApp extends StatelessWidget {
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
                 //return Review(str, payload);
               } else {
-                return Landing();
+                return ProductPage();
               }
             }
           } else {
-            return Landing();
+            return ProductPage();
           }
         }
       ),
