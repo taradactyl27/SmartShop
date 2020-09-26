@@ -1,19 +1,26 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import '../util/ProductJsonMapper.dart';
+import './ProductPage.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'dart:convert';
 
 class MainCart extends StatefulWidget{
-
+    List<Map<String,int>> productIdsList = [];
+    MainCart({Key key, @required this.productIdsList}) : super(key: key);
     @override
     _MainCart createState() => _MainCart();
 
 }
 
 class _MainCart extends State<MainCart> {
+  @override
+  void initState() {
+    List<Map<String,int>> productIdsList= widget.productIdsList;
+    super.initState();
+    }
   List picked = [false, false, false, false];
-
+  
   int totalAmount = 0;
 
   pickToggle(index) {
@@ -36,7 +43,27 @@ class _MainCart extends State<MainCart> {
       }
     }
   }
-
+  void handleQRScanner() async {
+    var result = await BarcodeScanner.scan();
+    if(this.widget.productIdsList == null){
+      setState(
+        () {
+          this.widget.productIdsList = [];
+        }        
+      );
+    }
+    print(this.widget.productIdsList);
+    Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(product_id: result.rawContent, productIds: this.widget.productIdsList),
+          ),
+    );
+    print(result.type); // The result type (barcode, cancelled, failed)
+    print(result.rawContent); // The barcode content
+    print(result.format); // The barcode format (as enum)
+    print(result.formatNote); // If a unknown format was scanned this field contains a note
+  }
   List<Product> products = ProductJsonMapper.fromJsonArray('''{
       "products": [{
           "_id": "5f6eb803db6c2e1eee7d31af",
@@ -173,7 +200,26 @@ class _MainCart extends State<MainCart> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RaisedButton(
+                              onPressed: () {
+                                handleQRScanner();
+                              },
+                              elevation: 0.5,
+                              color: Color(0x99FC7B7B),
+                              child: Center(
+                                child: Text(
+                                  'Scan New Item',
+                                ),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                              textColor: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 55.0),
                           Text('Total: \$' + totalAmount.toString()),
                           SizedBox(width: 10.0),
                           Padding(
