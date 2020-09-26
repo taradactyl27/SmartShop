@@ -1,104 +1,39 @@
-// module imports
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const passport = require("passport");
-const app = express();
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var mongoose = require('mongoose');
+var { graphqlHTTP } = require('express-graphql');
+var { buildSchema } = require('graphql');
+var schema = require('./graphql/schemas');
+var passport = require("passport");
+var db = require('./config/db.json');
 
-// file imports
-const users = require("./api/users");
-const Manager = require("./api/TaskManager");
-const keys = require("./config/keys");
-require("./config/passport")(passport); // Passport config
 
-// export universal manager
-//const TaskManager = new Manager();
-//module.exports = TaskManager;
+var connection = "mongodb://" + db.DB_USER + ":" + db.DB_PASSWORD + "@smartshopdb-shard-00-00.zsyov.mongodb.net:27017,smartshopdb-shard-00-01.zsyov.mongodb.net:27017,smartshopdb-shard-00-02.zsyov.mongodb.net:27017/SmartShopDB?ssl=true&replicaSet=atlas-8q4qhe-shard-0&authSource=admin&retryWrites=true&w=majority";
+mongoose.connect(connection)
+.then(() =>  console.log('connection successful'))
+.catch((err) => console.error(err));
 
-// Bodyparser middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
-// Connect to MongoDB
-const opts = { useNewUrlParser: true, useUnifiedTopology: true };
-mongoose.connect(keys.MONGO_KEY, opts).then(() => {
-  console.log("Connected to database");
-}).catch((err) => {
-  console.log(err);
-});
+var app = express();
 
-// Passport middleware
-app.use(passport.initialize());
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-// Routes
-app.use("/api/users", users);
-app.use("/api/taskmanager", Manager)
 
-app.post('/dataSubmittedHW', function(req, res){
-  let data = req.body.data;
-  User.find({username: Username}, function (err, user) {
-  /*const vision = require('@google-cloud/vision');
-  const client = new vision.ImageAnnotatorClient();
-  
-  const fileName = 'Local image file, e.g. /path/to/image.png';
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-  // Performs text detection on the local file
-  const [result] = await client.textDetection(fileName);
-  const detections = result.textAnnotations;
-  console.log('Text:');
-  detections.forEach(text => console.log(text));*/
-  user.save(function (err) {
-    if(err) {
-        console.error('ERROR!');
-    }
-});
-});
-})
-app.post('/dataSubmittedNotes', function(req,res){
-  let data = req.body.data;
-  User.find({username: Username}, function (err, user) {
-  /*const vision = require('@google-cloud/vision');
+var app = express();
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: global,
+  graphiql: true,
+}));
+app.listen(4000);
 
-  const client = new vision.ImageAnnotatorClient();
-  const fileName = 'Local image file, e.g. /path/to/image.png';
-  
-  // Read a local image as a text document
-  const [result] = await client.documentTextDetection(fileName);
-  const fullTextAnnotation = result.fullTextAnnotation;
-  console.log(`Full text: ${fullTextAnnotation.text}`);
-  fullTextAnnotation.pages.forEach(page => {
-    page.blocks.forEach(block => {
-      console.log(`Block confidence: ${block.confidence}`);
-      block.paragraphs.forEach(paragraph => {
-        console.log(`Paragraph confidence: ${paragraph.confidence}`);
-        paragraph.words.forEach(word => {
-          const wordText = word.symbols.map(s => s.text).join('');
-          console.log(`Word text: ${wordText}`);
-          console.log(`Word confidence: ${word.confidence}`);
-          word.symbols.forEach(symbol => {
-            console.log(`Symbol text: ${symbol.text}`);
-            console.log(`Symbol confidence: ${symbol.confidence}`);
-          });
-        });
-      });
-    });
-  });*/
-  user.save(function (err) {
-    if(err) {
-        console.error('ERROR!');
-    }
-});
-});
-})
 
-app.put('/profileupdate', function(req,res){
-  let data = req.body.data;
-  User.update({username: oldUsername}, {
-    data: newUser.data
-}, function(err, numberAffected, rawResponse) {
-   //handle it
-})
-})
-// run the server
-const port = process.env.PORT || 5000; // process.env.port is Heroku's port if we deploy
-app.listen(port, () => console.log(`Server running on port ${port}!`));
+
+module.exports = app;
