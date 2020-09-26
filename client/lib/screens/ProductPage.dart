@@ -247,14 +247,6 @@ class _ProductPage extends State<ProductPage>{
                 shape: CircleBorder(side: BorderSide(color: Colors.black)),
               ),
             ),
-              /*Text('x30%',
-                style: TextStyle(
-              fontFamily: 'Raleway',
-                fontSize: 17.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-            ),
-              ),*/
               SizedBox(width: 15.0),
             SizedBox(
               width: 50.0,
@@ -266,14 +258,6 @@ class _ProductPage extends State<ProductPage>{
                 shape: CircleBorder(side: BorderSide(color: Colors.black)),
               ),
             ),
-            /*Text('x60%',
-            style: TextStyle(
-              fontFamily: 'Raleway',
-                fontSize: 17.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-            ),
-            ),*/
             SizedBox(width: 15.0),
             SizedBox(
               width: 50.0,
@@ -285,14 +269,6 @@ class _ProductPage extends State<ProductPage>{
                 shape: CircleBorder(side: BorderSide(color: Colors.black)),
               ),
             ),
-            /*Text('x10%',
-            style: TextStyle(
-              fontFamily: 'Raleway',
-                fontSize: 17.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-            ),
-            ),*/
             SizedBox(width: 15.0),
             SizedBox(
               width: 50.0,
