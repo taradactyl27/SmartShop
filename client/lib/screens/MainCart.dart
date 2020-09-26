@@ -4,6 +4,8 @@ import '../util/ProductJsonMapper.dart';
 import './ProductPage.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../util/RequestBuilder.dart';
 
 class MainCart extends StatefulWidget{
     List<Map<String,int>> productIdsList = [];
@@ -130,6 +132,8 @@ class _MainCart extends State<MainCart> {
 
   @override
   Widget build(BuildContext context) {
+    Future<http.Response> res = RequestBuilder.getItemsFromIdArray(["5f6eb803db6c2e1eee7d31af"]);
+    res.then((value) => print(json.decode(value.body)));
     return Scaffold(
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
             Stack(children: [
