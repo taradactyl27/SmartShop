@@ -17,7 +17,7 @@ var userType = new GraphQLObjectType({
     // link position[] scale
     name: 'user',
     fields: () => ({
-            id: {
+            _id: {
                 type: GraphQLString
             },
             name: {
@@ -36,7 +36,7 @@ var itemType = new GraphQLObjectType({
     // link position[] scale
     name: 'item',
     fields: () => ({
-            id: {
+            _id: {
                 type: GraphQLString
             },
             name: {
@@ -61,7 +61,7 @@ var qrType = new GraphQLObjectType({
     // link position[] scale
     name: 'qr',
     fields: () => ({
-            id: {
+            _id: {
                 type: GraphQLString
             },
             value: {
