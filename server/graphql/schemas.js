@@ -42,7 +42,7 @@ var itemType = new GraphQLObjectType({
             name: {
                 type: GraphQLString
             },
-            Price: {
+            price: {
                 type: GraphQLFloat
             },
             picture: {
@@ -92,6 +92,25 @@ var queryType = new GraphQLObjectType({
                         throw new Error('Error')
                     }
                     return userDetails
+                }
+            },
+            
+            getSimilarById: {
+                type: new GraphQLList(itemType),
+                args: {
+                    id: {
+                        name: '_id',
+                        type: GraphQLString
+                    }
+                },
+                resolve: async function (root, params) {
+                    const itemDetails = await ItemModel.findById(params.id).exec()
+                    var a = itemDetails.get('name');
+                    const ret = ItemModel.find({name: a}).exec()
+                    if (!itemDetails) {
+                        throw new Error('Error')
+                    }
+                    return ret
                 }
             },
 
@@ -173,6 +192,23 @@ var mutation = new GraphQLObjectType({
                         throw new Error('Error');
                     }
                     return newUser
+                }
+            },
+
+            changeStock: {
+                type: itemType,
+                args: {
+                    itemId:{
+                         type: new GraphQLNonNull(GraphQLString)
+                    }, 
+                    newStock: {
+                        type: new GraphQLNonNull(GraphQLList(GraphQLInt))
+                    }
+                   },
+                resolve: function (root, params) {
+                    return ItemModel.findByIdAndUpdate(params.itemId, {stock: params.newStock}, function (err) {
+                        if (err) return next(err);
+                    });
                 }
             },
 
