@@ -55,13 +55,25 @@ class ProductJsonMapper {
 
   static List<Product> fromJsonArray(String jsonString) {
     Map<String, dynamic> decodedMap = jsonDecode(jsonString);
-    List<dynamic> dynamicList = decodedMap['products'];
+    List<dynamic> dynamicList = decodedMap['getItemsFromIdArray'];
     List<Product> products = new List<Product>();
     dynamicList.forEach((f) {
       Product p = ProductJsonMapper.fromJsonMap(f);
       products.add(p);
     });
+    return products;
+  }
 
+    static List<Product> fromJsonArrayV2(String jsonString) {
+    print("JSON STRING");
+    print(jsonString);
+    Map<String, dynamic> decodedMap = jsonDecode(jsonString);
+    List<dynamic> dynamicList = decodedMap['getItemById'];
+    List<Product> products = new List<Product>();
+    dynamicList.forEach((f) {
+      Product p = ProductJsonMapper.fromJsonMap(f);
+      products.add(p);
+    });
     return products;
   }
 }

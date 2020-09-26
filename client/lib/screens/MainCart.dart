@@ -20,7 +20,23 @@ class _MainCart extends State<MainCart> {
   @override
   void initState() {
     List<Map<String,int>> productIdsList = widget.productIdsList;
-    List<Product> products = generateProducts(productIdsList);
+    if(productIdsList != null && productIdsList.length > 0){
+      print("CHIEF KEEF");
+      List<String> inputString = [];
+      for (var map in productIdsList){
+        inputString.add(map.keys.first);
+      }
+      print(inputString);
+      List<Product> tempProductList;
+      Future<http.Response> queriedProducts = RequestBuilder.getItemsFromIdArray(inputString);
+      queriedProducts.then((value) => {
+        setState(() {widget.products = ProductJsonMapper.fromJsonArray(jsonEncode(jsonDecode(value.body)["data"]));}),
+        //tempProductList = ProductJsonMapper.fromJsonArrayV2(value.body)
+        print("WIDGET DECODED"),
+      });
+      super.initState();
+      //return tempProductList;
+      }
     super.initState();
     }
   List picked = [false, false, false, false];
@@ -71,14 +87,18 @@ class _MainCart extends State<MainCart> {
   List<Product> generateProducts(List<Map<String,int>> idList) {
    /*    print("GENERATING PRODUCTS: ");
       print(idList); */
-      if(idList != null){
+      if(idList != null && idList.length > 0){
       List<String> inputString = [];
       for (var map in idList){
         inputString.add(map.keys.first);
       }
       print(inputString);
-      Future<http.Response> queriedProducts = RequestBuilder.getItemsFromArray(inputString);
-      queriedProducts.then((value) => print(json.decode(value.body)));
+      List<Product> tempProductsList;
+      Future<http.Response> queriedProducts = RequestBuilder.getItemsFromIdArray(inputString);
+      queriedProducts.then((value) => {
+        tempProductsList = ProductJsonMapper.fromJsonArray(value.body)
+        });
+      return tempProductsList;
       }
       else{
         return [];
