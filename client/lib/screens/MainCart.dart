@@ -1,6 +1,7 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import '../util/ProductJsonMapper.dart';
+import '../util/RequestBuilder.dart';
 import './ProductPage.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'dart:convert';
@@ -9,6 +10,7 @@ import '../util/RequestBuilder.dart';
 
 class MainCart extends StatefulWidget{
     List<Map<String,int>> productIdsList = [];
+    List<Product> products = [];
     MainCart({Key key, @required this.productIdsList}) : super(key: key);
     @override
     _MainCart createState() => _MainCart();
@@ -18,7 +20,8 @@ class MainCart extends StatefulWidget{
 class _MainCart extends State<MainCart> {
   @override
   void initState() {
-    List<Map<String,int>> productIdsList= widget.productIdsList;
+    List<Map<String,int>> productIdsList = widget.productIdsList;
+    List<Product> products = generateProducts(productIdsList);
     super.initState();
     }
   List picked = [false, false, false, false];
@@ -66,7 +69,24 @@ class _MainCart extends State<MainCart> {
     print(result.format); // The barcode format (as enum)
     print(result.formatNote); // If a unknown format was scanned this field contains a note
   }
-  List<Product> products = ProductJsonMapper.fromJsonArray('''{
+  List<Product> generateProducts(List<Map<String,int>> idList) {
+   /*    print("GENERATING PRODUCTS: ");
+      print(idList); */
+      if(idList != null){
+      List<String> inputString = [];
+      for (var map in idList){
+        inputString.add(map.keys.first);
+      }
+      print(inputString);
+      Future<http.Response> queriedProducts = RequestBuilder.getItemsFromArray(inputString);
+      queriedProducts.then((value) => print(json.decode(value.body)));
+      }
+      else{
+        return [];
+      }
+  }
+  //List<Product> products = generateProducts(this.widget.productIdsList);
+  /* ProductJsonMapper.fromJsonArray('''{
       "products": [{
           "_id": "5f6eb803db6c2e1eee7d31af",
           "stock": [
@@ -128,7 +148,7 @@ class _MainCart extends State<MainCart> {
           "color": "Green"
       }]
     }''');
-
+ */
 
   @override
   Widget build(BuildContext context) {
@@ -177,12 +197,12 @@ class _MainCart extends State<MainCart> {
                   children: <Widget>[
                     Column(
                         children: <Widget>[
-                           for (var product in products) 
+                           for (var product in widget.products) 
                            itemCard(product.name,
                                     product.color,
                                     product.price, 
                                     product.picture,
-                                    true,0)
+                                    true,0) 
                       /*   itemCard('Gray T-Shirt', 'gray', '248',
                             '', true, 0),
                         itemCard('Ankle Jeans', 'blue', '248',
