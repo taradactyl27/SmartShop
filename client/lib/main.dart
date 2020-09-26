@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
             var str = snapshot.data;
             var jwt = str.split(".");
             if(jwt.length !=3) {
-              return ProductPage();
               return MainCart();
             } else {
               var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
@@ -44,11 +43,11 @@ class MyApp extends StatelessWidget {
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
                 //return Review(str, payload);
               } else {
-                return ProductPage();
+                return MainCart();
               }
             }
           } else {
-            return ProductPage();
+            return MainCart();
           }
         }
       ),
