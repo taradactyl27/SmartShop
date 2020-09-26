@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "client": "npm start --prefix client",
-    "server": "cd server && nodemon index.js"
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
