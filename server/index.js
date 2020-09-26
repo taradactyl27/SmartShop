@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var app = express();
 app.use('/graphql', graphqlHTTP({
   schema: schema,
-  rootValue: root,
+  rootValue: global,
   graphiql: true,
 }));
 app.listen(4000);
