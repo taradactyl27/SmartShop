@@ -118,7 +118,7 @@ class _ProductPage extends State<ProductPage>{
 
   bool isSizeStock(int size){
     //query the database for the array
-    //get the index from array that is relative to the size
+    //get the index from array that is relative to the size of the item
 
 
 
