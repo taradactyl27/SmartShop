@@ -65,7 +65,7 @@ class _LandingState extends State<Landing>{
                   ClipPath(
                       clipper: WaveClipperTwo(),
                       child: Container(
-                        height: 400.0,
+                        height: 350.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(25.0),
@@ -93,16 +93,29 @@ class _LandingState extends State<Landing>{
                     style: TextStyle(
                         fontFamily: 'Raleway',
                         fontSize: 44.0,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white)),
               )),
-              Container(
+              Positioned(
+                width: MediaQuery.of(context).size.width,
+                top: MediaQuery.of(context).size.width * 0.20,//TRY TO CHANGE THIS **0.30** value to achieve your goal 
+                child: Container(
+                  margin: EdgeInsets.all(16.0),
+                  child:Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset('assets/SmartShopping.png', scale: 0.35),
+                      ]
+                  ),
+                ))
+              /*Container(
+                  alignment: Alignment(10, 10),
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("assets/SmartShopping.png"),
                           fit: BoxFit.cover
-                          size)),
-              ),//Container End
+                          )),
+              ),*///Container End
               ],
             ),
           ),
@@ -126,13 +139,13 @@ class _LandingState extends State<Landing>{
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
-                                color: Color(0xff3066BE),
+                                color: Color(0xffFC7B7B),
                               ),
                             ),
                           ),
                           child: TextField(
                             controller: _usercontroller,
-                            style: new TextStyle(color: Colors.white),
+                            style: new TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Username",
@@ -145,14 +158,14 @@ class _LandingState extends State<Landing>{
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
-                                color: Color(0xff3066BE),
+                                color: Color(0xffFC7B7B),
                               ),
                             ),
                           ),
                           child: TextField(
                             controller: _passwordcontroller,
                             obscureText: true,
-                            style: new TextStyle(color: Colors.white),
+                            style: new TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Password",
@@ -193,7 +206,7 @@ class _LandingState extends State<Landing>{
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color(0xff6FB6F6),
+                        color: Color(0xffFC7B7B),
                       ),
                       child: Center(
                         child: Text(
@@ -203,7 +216,7 @@ class _LandingState extends State<Landing>{
                             color: Colors.white),
                         ),
                       ),
-                    ),
+                    ),//Container
                   ),
                 ),
                 SizedBox(
@@ -235,7 +248,7 @@ class _LandingState extends State<Landing>{
                     margin: EdgeInsets.symmetric(horizontal: 40),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color(0xff6FB6F6),
+                      color: Color(0xffFC7B7B),
                     ),
                     child: Center(
                       child: Text(
