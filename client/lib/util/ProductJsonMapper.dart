@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Product {
-  final String _id;
+  final String id;
   final List<dynamic> stock;
   final String name;
   final String picture;
@@ -9,14 +9,14 @@ class Product {
   final String color;
   final double price;
 
-  Product(this._id, this.stock, this.name, this.picture, this.desc, this.color, this.price);
+  Product(this.id, this.stock, this.name, this.picture, this.desc, this.color, this.price);
 } 
 
 class ProductJsonMapper {
   static String toJson(Product p) {
     Map<String, dynamic> map() =>
     {
-      '_id': p._id,
+      'id': p.id,
       'name': p.name,
       'stock': p.stock.join(","),
       'picture': p.picture,

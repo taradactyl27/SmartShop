@@ -3,22 +3,40 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import './MainCart.dart';
 import '../util/ProductJsonMapper.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class ProductPage extends StatefulWidget{
+  final String product_id;
+  List<Map<String,int>> productIds = [];
+  ProductPage({Key key, @required this.product_id, @required this.productIds}) : super(key: key);
   @override
   _ProductPage createState()=>_ProductPage();
 
 }
 
 class _ProductPage extends State<ProductPage>{
+  @override
+  void initState() {
+    String product_id = widget.product_id;
+    List<Map<String,int>> productIds= widget.productIds;
+    super.initState();
+  }
   int photoIndex = 0;
   int pickedSize = 0;
   List<String> photos = [];
   List picked = [true, false, false, false, false ];
   int previousPicked = 0;
   List<String> sizes = ['XS','S','M','L','XL'];
+  void cartHandler() {
+    print(this.widget.productIds);
+    this.widget.productIds.add({this.widget.product_id: pickedSize});
+    print(this.widget.productIds[this.widget.productIds.length-1]);
+    Navigator.pop(
+        context, this.widget.productIds
+        );
+  }
   void _previousImage() {
     setState(() {
       photoIndex = photoIndex > 0 ? photoIndex - 1 : 0;
@@ -40,7 +58,7 @@ class _ProductPage extends State<ProductPage>{
 
   List<Product> products = ProductJsonMapper.fromJsonArray('''{
       "products": [{
-          "_id": "5f6eb803db6c2e1eee7d31af",
+          "id": "5f6eb803db6c2e1eee7d31af",
           "stock": [
             1,
             0,
@@ -74,19 +92,6 @@ class _ProductPage extends State<ProductPage>{
       }
     }
     return val;
-  }
-
-  bool isSizeStock(int size){
-    //query the database for the array
-    //get the index from array that is relative to the size of the item
-
-
-
-   // if(  > 0){
-   //   return true;
-   // }
-
-
   }
 
 
@@ -131,7 +136,9 @@ class _ProductPage extends State<ProductPage>{
                 child: IconButton(
                     alignment: Alignment.topLeft,
                     icon: Icon(Icons.arrow_back),
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
               ),
                 Positioned(
                     top: 240.0,
@@ -177,7 +184,7 @@ class _ProductPage extends State<ProductPage>{
                   top: 20,
                   left: 15,
                      child: Text(
-                        'SKU: FW7089',
+                        'SKU: ' + '2',
                         style: TextStyle(
                         fontFamily: 'Raleway',
                         fontSize: 15.0,
@@ -318,7 +325,9 @@ class _ProductPage extends State<ProductPage>{
                 width: 150.0,
                 height: 50.0,
                 child: new RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cartHandler();
+                  },
                   child: Text('Add To Cart', style: TextStyle(
                     fontFamily: "Raleway",
                     color: Colors.white, fontSize:14),), 
