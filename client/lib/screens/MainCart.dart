@@ -6,7 +6,6 @@ import './ProductPage.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../util/RequestBuilder.dart';
 
 class MainCart extends StatefulWidget{
     List<Map<String,int>> productIdsList = [];
