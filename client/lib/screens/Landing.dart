@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../Animation/FadeAnimation.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 final storage = FlutterSecureStorage();
 const SERVER_IP = 'http://10.0.2.2:5000';
 class Landing extends StatefulWidget {
@@ -50,7 +51,7 @@ class _LandingState extends State<Landing>{
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xff121212),
+      //backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -61,14 +62,27 @@ class _LandingState extends State<Landing>{
                 Positioned(
                     child: FadeAnimation(
                   1,
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/banner.png"),
-                      ),
-                    ),
+                  ClipPath(
+                      clipper: WaveClipperTwo(),
+                      child: Container(
+                        height: 400.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(25.0),
+                            bottomRight: Radius.circular(25.0)),
+                          gradient: LinearGradient(
+                          colors: [
+                            //Color(0xFF80F9B7),
+                            //Color(0xFF9ABDEB),
+                            Color(0x99FC7B7B),
+                            Color(0x99A6C1FF),
+                          ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                 ),
+                ),
                   ),
+                    ),
                 )),
                 Positioned(
                 top: 60,
@@ -82,6 +96,13 @@ class _LandingState extends State<Landing>{
                         fontWeight: FontWeight.w500,
                         color: Colors.white)),
               )),
+              Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/SmartShopping.png"),
+                          fit: BoxFit.cover
+                          size)),
+              ),//Container End
               ],
             ),
           ),
