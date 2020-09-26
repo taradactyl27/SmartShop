@@ -1,6 +1,7 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import '../util/ProductJsonMapper.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'dart:convert';
 
 class MainCart extends StatefulWidget{
@@ -110,21 +111,22 @@ class _MainCart extends State<MainCart> {
                 height: MediaQuery.of(context).size.height,
                 width: double.infinity,
               ),
-              Container(
-                height: 250.0,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    gradient: LinearGradient(
-                    colors: [
-                      //Color(0xFF80F9B7),
-                      //Color(0xFF9ABDEB),
-                      Color(0xFFFC7B7B),
-                      Color(0xFFA6C1FF),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                 ),
+              ClipPath(
+                clipper: WaveClipperTwo(),
+                child: Container(
+                  height: 215.0,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                      colors: [
+                        //Color(0xFF80F9B7),
+                        //Color(0xFF9ABDEB),
+                        Color(0x99FC7B7B),
+                        Color(0x99A6C1FF),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                  ),
+                  ),
                 ),
               ),
               Positioned(
@@ -178,11 +180,15 @@ class _MainCart extends State<MainCart> {
                             child: RaisedButton(
                               onPressed: () {},
                               elevation: 0.5,
-                              color: Colors.red,
+                              color: Colors.black,
                               child: Center(
                                 child: Text(
                                   'Pay Now',
                                 ),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.black)
                               ),
                               textColor: Colors.white,
                             ),

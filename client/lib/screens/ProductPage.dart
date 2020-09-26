@@ -14,24 +14,46 @@ class ProductPage extends StatefulWidget{
 
 class _ProductPage extends State<ProductPage>{
   int photoIndex = 0;
-  List<String> photos = [
-    'assets/item.jpg',
-    'assets/item1.jpg',
-    'assets/item2.jpg',
-  ];
-
+  int pickedSize = 0;
+  List<String> photos = [];
+  List picked = [true, false, false, false, false ];
+  int previousPicked = 0;
+  List<String> sizes = ['XS','S','M','L','XL'];
   void _previousImage() {
     setState(() {
       photoIndex = photoIndex > 0 ? photoIndex - 1 : 0;
     });
   }
-
+  void pickToggle(index) {
+    setState(() {
+      picked[previousPicked] = !picked[previousPicked];
+      picked[index] = !picked[index];
+      pickedSize = index;
+      previousPicked = index;
+    });
+  }
   void _nextImage() {
     setState(() {
       photoIndex = photoIndex < photos.length - 1 ? photoIndex + 1 : photoIndex;
     });
   }
 
+  List<Product> products = ProductJsonMapper.fromJsonArray('''{
+      "products": [{
+          "_id": "5f6eb803db6c2e1eee7d31af",
+          "stock": [
+            1,
+            0,
+            3,
+            4,
+            5
+          ],
+          "name": "Low-Cut Tshirt",
+          "price": 7.99,
+          "picture": "tshirt.jpg",
+          "desc": "Elevate your tee rotation with ease thanks to these amazing low-cut T-Shirts. This essential pack includes three tees that each have crew neck, a soft cotton fabrication, and a scallop hem for added coverage.A set of three soft cotton tees in our signature curved hem silhouette with longer length, featuring a crewneck, icon at left chest and short sleeves. Slim Fit. Imported.",
+          "color": "black"
+      }]}''');
   int getColorHexFromStr(String colorStr) {
     colorStr = "FF" + colorStr;
     colorStr = colorStr.replaceAll("#", "");
@@ -82,9 +104,10 @@ class _ProductPage extends State<ProductPage>{
                 Container(
                   height: 275.0,
                   decoration: BoxDecoration(
+                      color: Colors.white,
                       image: DecorationImage(
-                          image: AssetImage(photos[photoIndex]),
-                          fit: BoxFit.cover)),
+                          image: AssetImage("assets/" + products[0].picture),
+                          fit: BoxFit.contain)),
                 ),
                 GestureDetector(
                   child: Container(
@@ -103,11 +126,20 @@ class _ProductPage extends State<ProductPage>{
                   onTap: _previousImage,
                 ),
                 Positioned(
+                top: 25,
+                left: 10,
+                child: IconButton(
+                    alignment: Alignment.topLeft,
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {}),
+              ),
+                Positioned(
                     top: 240.0,
                     left: MediaQuery.of(context).size.width / 2 - 30.0,
                     child: Row(
                       children: <Widget>[
                         SelectedPhoto(
+
                           numberOfDots: photos.length,
                           photoIndex: photoIndex,
                         )
@@ -116,7 +148,7 @@ class _ProductPage extends State<ProductPage>{
               ],
             ),
             Container(
-                height: 400,
+                height: 450,
                 width: double.infinity,
                 child: Stack(
                   children: [
@@ -156,7 +188,7 @@ class _ProductPage extends State<ProductPage>{
                  Positioned(
                     top: 45,
                     left: 15,
-                    child: Text('Russian Lifestyle',
+                    child: Text(products[0].name,
                     style: TextStyle(
                       fontFamily: 'Raleway',
                       fontSize: 25.0,
@@ -172,17 +204,17 @@ class _ProductPage extends State<ProductPage>{
                       children: <Widget>[
                         Container(
                           width: (MediaQuery.of(context).size.width / 4 + MediaQuery.of(context).size.width / 2) - 10.0,
-                          child: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                          child: Text( products[0].desc,
                           style: TextStyle(
                             fontFamily: 'Raleway',
-                            fontSize: 12.0,
-                            color: Colors.grey,
+                            fontSize: 13.0,
+                            color: Colors.grey[700],
                           ),
                           ),
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: Text('\$ 120',
+                          child: Text('\$' + products[0].price.toString(),
                             style: TextStyle(
                               fontFamily: 'Raleway',
                               fontSize: 25.0,
@@ -216,10 +248,12 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: () {},
-                child: Text('XS', style: TextStyle(color: Colors.black),), 
+                onPressed: products[0].stock[0] > 0 ? () => pickToggle(0) : null,
+                child: Text('XS', style: TextStyle(
+                  fontFamily: "Raleway",
+                  color: picked[0] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
                 color: Colors.white,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+                shape: CircleBorder(side: BorderSide(color: picked[0] ? Colors.black : Colors.grey.withOpacity(0.4))),
               ),
             ),
             SizedBox(width: 15.0),
@@ -227,10 +261,12 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: () {},
-                child: Text('S', style: TextStyle(color: Colors.black),), 
+                onPressed: products[0].stock[1] > 0 ? () => pickToggle(1) : null,
+                child: Text('S', style: TextStyle(
+                  fontFamily: "Raleway",
+                  color: picked[1] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
                 color: Colors.white,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+                shape: CircleBorder(side: BorderSide(color: picked[1] ? Colors.black : Colors.grey.withOpacity(0.4))),
               ),
             ),
               SizedBox(width: 15.0),
@@ -238,10 +274,12 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: () {},
-                child: Text('M', style: TextStyle(color: Colors.black),), 
+                onPressed: products[0].stock[2] > 0 ? () => pickToggle(2) : null,
+                child: Text('M', style: TextStyle(
+                  fontFamily: "Raleway",
+                  color: picked[2] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
                 color: Colors.white,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+                shape: CircleBorder(side: BorderSide(color: picked[2] ? Colors.black : Colors.grey.withOpacity(0.4))),
               ),
             ),
             SizedBox(width: 15.0),
@@ -249,10 +287,12 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: () {},
-                child: Text('L', style: TextStyle(color: Colors.black),), 
+                onPressed: products[0].stock[3] > 0 ? () => pickToggle(3) : null,
+                child: Text('L', style: TextStyle(
+                  fontFamily: "Raleway",
+                  color: picked[3] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
                 color: Colors.white,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+                shape: CircleBorder(side: BorderSide(color: picked[3] ? Colors.black : Colors.grey.withOpacity(0.4))),
               ),
             ),
             SizedBox(width: 15.0),
@@ -260,15 +300,37 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: () {},
-                child: Text('XL', style: TextStyle(color: Colors.black),), 
+                onPressed: products[0].stock[4] > 0 ? () => pickToggle(4) : null,
+                child: Text('XL', style: TextStyle(
+                  fontFamily: "Raleway",
+                  color: picked[4] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
                 color: Colors.white,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+                shape: CircleBorder(side: BorderSide(color: picked[4] ? Colors.black : Colors.grey.withOpacity(0.4))),
               ),
             ),
             ],
           )
-        )
+        ),
+        Positioned(
+            top: 375,
+            left: 15,
+            child: SizedBox(
+                width: 150.0,
+                height: 50.0,
+                child: new RaisedButton(
+                  onPressed: () {},
+                  child: Text('Add To Cart', style: TextStyle(
+                    fontFamily: "Raleway",
+                    color: Colors.white, fontSize:14),), 
+                  color: Colors.black,
+                  shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.black)
+                      ),
+
+                ),
+              ),
+        ),
             ],
             ),
             ),
@@ -327,55 +389,6 @@ class _ProductPage extends State<ProductPage>{
         )
       ],
     ),
-    bottomNavigationBar: Material(
-      elevation: 7.0,
-      color: Colors.white,
-      child: Container(
-        height: 50.0,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-          SizedBox(width: 10.0),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 50.0,
-                width: 50.0,
-                color: Colors.white,
-                child: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 50.0,
-                width: 50.0,
-                color: Colors.white,
-                child: Icon(
-                  Icons.account_box,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 200.0,
-              height: 50.0,
-              child: new RaisedButton(
-                onPressed: () {},
-                child: Text('Add To Cart', style: TextStyle(color: Colors.black, fontSize:14),), 
-                color: Colors.red,
-                //shape: StadiumBorder(side: BorderSide(color: Colors.black)),
-              ),
-            ),
-          ]
-        )
-      )
-    ),
     );
   }
 }
@@ -407,7 +420,7 @@ class SelectedPhoto extends StatelessWidget {
             width: 10.0,
             height: 10.0,
             decoration: BoxDecoration(
-                color: Colors.yellow,
+                color: Color(0x99A6C1FF),
                 borderRadius: BorderRadius.circular(5.0),
                 boxShadow: [
                   BoxShadow(
