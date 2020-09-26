@@ -95,6 +95,23 @@ var queryType = new GraphQLObjectType({
                 }
             },
             
+            getItemsFromIdArray: {
+                type: new GraphQLList(itemType),
+                args: {
+                    id: {
+                        name: '_id',
+                        type: new GraphQLList(GraphQLString)
+                    }
+                },
+                resolve: async function (root, params) {
+                    const itemDetails = await ItemModel.find({ _id: { $in : params.id } }).exec()
+                    if (!itemDetails) {
+                        throw new Error('Error')
+                    }
+                    return itemDetails
+                }
+            },
+
             getSimilarById: {
                 type: new GraphQLList(itemType),
                 args: {
