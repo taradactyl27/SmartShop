@@ -1,72 +1,10 @@
 import './Review.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
-
-class ProductJsonMapper {
-  static String toJson(Product p) {
-    Map<String, dynamic> map() =>
-    {
-      '_id': p._id,
-      'name': p.name,
-      'stock': p.stock.join(","),
-      'picture': p.picture,
-      'desc': p.desc,
-      'price': p.price,
-      'color': p.color,
-    };
-    String result = jsonEncode(map());
-    return result;
-  }
-
-  static Product fromJson(String jsonString) {
-    Map<String, dynamic> json = jsonDecode(jsonString);
-    String id = json['_id'];
-    String name = json['name'];
-    List<dynamic> stock =  json['stock'];
-    String picture = json['picture'];
-    String desc = json['desc'];
-    double price = json['price'];
-    String color = json['color'];
-    Product p = new Product(id, stock, name, picture, desc, color, price);
-    return p;
-  }
-
-  static Product fromJsonMap(Map<String, dynamic> json) {
-    String id = json['_id'];
-    String name = json['name'];
-    List<dynamic> stock =  json['stock'];
-    String picture = json['picture'];
-    String desc = json['desc'];
-    double price = json['price'];
-    String color = json['color'];
-    Product p = new Product(id, stock, name, picture, desc, color, price);
-    return p;
-  }
-
-  static List<Product> fromJsonArray(String jsonString) {
-    Map<String, dynamic> decodedMap = jsonDecode(jsonString);
-    List<dynamic> dynamicList = decodedMap['products'];
-    List<Product> products = new List<Product>();
-    dynamicList.forEach((f) {
-      Product p = ProductJsonMapper.fromJsonMap(f);
-      products.add(p);
-    });
-
-    return products;
-  }
-}
-
-class Product {
-  final String _id;
-  final List<dynamic> stock;
-  final String name;
-  final String picture;
-  final String desc;
-  final String color;
-  final double price;
-
-  Product(this._id, this.stock, this.name, this.picture, this.desc, this.color, this.price);
-}
+import '../util/ProductJsonMapper.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class ProductPage extends StatefulWidget{
   @override
@@ -122,9 +60,9 @@ class _ProductPage extends State<ProductPage>{
 
 
 
-    if(  > 0){
-      return true;
-    }
+   // if(  > 0){
+   //   return true;
+   // }
 
 
   }
@@ -133,14 +71,14 @@ class _ProductPage extends State<ProductPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-      shrinkWrap: true,
+        body: Column(
       children: <Widget>[
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Stack(
               children: <Widget>[
+                
                 Container(
                   height: 275.0,
                   decoration: BoxDecoration(
@@ -177,133 +115,101 @@ class _ProductPage extends State<ProductPage>{
                     ))
               ],
             ),
-            SizedBox(height: 20.0),
-            Padding(
-              padding: EdgeInsets.only(left: 15.0),
-              child: Text(
-                'SKU: FW7089',
-                style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 15.0,
-                color: Colors.grey
-          ),
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Padding(
-              padding: const EdgeInsets.only(left:15.0),
-              child: Text('Russian Lifestyle',
-              style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 25.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-              ),
-              ),
-            ),
-            SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(left:15.0),
-              child: Text('Color',
-              style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 25.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-              ),
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Padding(padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                width: (MediaQuery.of(context).size.width / 4 + MediaQuery.of(context).size.width / 2) - 10.0,
-                child: Text('Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah',
-                style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 12.0,
-                  color: Colors.grey,
+            Container(
+                height: 400,
+                width: double.infinity,
+                child: Stack(
+                  children: [
+                    ClipPath(
+                      clipper: WaveClipperTwo(),
+                      child: Container(
+                        height: 115.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(25.0),
+                            bottomRight: Radius.circular(25.0)),
+                          gradient: LinearGradient(
+                          colors: [
+                            //Color(0xFF80F9B7),
+                            //Color(0xFF9ABDEB),
+                            Color(0x99FC7B7B),
+                            Color(0x99A6C1FF),
+                          ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                 ),
                 ),
+                  ),
+                    ),
+                  Positioned(
+                  top: 20,
+                  left: 15,
+                     child: Text(
+                        'SKU: FW7089',
+                        style: TextStyle(
+                        fontFamily: 'Raleway',
+                        fontSize: 15.0,
+                        color: Colors.white
+                        )
+                     ),
                 ),
-              ),
-              Text('\$ 120',
-                style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 25.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
+                 Positioned(
+                    top: 45,
+                    left: 15,
+                    child: Text('Russian Lifestyle',
+                    style: TextStyle(
+                      fontFamily: 'Raleway',
+                      fontSize: 25.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold
+                      ),
+                      ),
+                    ),
+                Positioned(
+                  top: 105,
+                  left: 15,
+                   child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: (MediaQuery.of(context).size.width / 4 + MediaQuery.of(context).size.width / 2) - 10.0,
+                          child: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                          style: TextStyle(
+                            fontFamily: 'Raleway',
+                            fontSize: 12.0,
+                            color: Colors.grey,
+                          ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          child: Text('\$ 120',
+                            style: TextStyle(
+                              fontFamily: 'Raleway',
+                              fontSize: 25.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold
+                                ),
+                            ),
+                          ),
+                          ],
+                 )
             ),
-          ),
-                ],
-              )
-            ),
-            /*SizedBox(height: 20.0),
-        Padding(
-          padding: EdgeInsets.only(left: 15.0),
-          child: Text(
-            'COLOR',
-            style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 22.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
+                Positioned(
+                  top: 250,
+                  left: 15,
+                  child: Text(
+                    'Size',
+                    style: TextStyle(
+                        fontFamily: 'Raleway',
+                        fontSize: 22.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold
             ),
           ),
         ),
-        SizedBox(height: 20.0),
-        Padding(
-          padding:  EdgeInsets.only(left: 15.0),
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-              width: 50.0,
-              height: 50.0,
-              child: new RaisedButton(
-                onPressed: () {},
-                color: Colors.black,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
-              ),
-            ),
-            SizedBox(width: 15.0),
-            SizedBox(
-              width: 50.0,
-              height: 50.0,
-              child: new RaisedButton(
-                onPressed: () {},
-                color: Colors.white,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
-              ),
-            ),
-            SizedBox(width: 15.0),
-            SizedBox(
-              width: 50.0,
-              height: 50.0,
-              child: new RaisedButton(
-                onPressed: () {}, 
-                color: Colors.red,
-                shape: CircleBorder(side: BorderSide(color: Colors.black)),
-              ),
-            )
-            ],
-          )
-        ),*/
-        SizedBox(height: 20.0),
-        Padding(
-          padding: EdgeInsets.only(left: 15.0),
-          child: Text(
-            'SIZE',
-            style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 22.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-            ),
-          ),
-        ),
-        SizedBox(height: 20.0),
-        Padding(
-          padding:  EdgeInsets.only(left: 15.0),
+        Positioned(
+          top: 300,
+          left: 15,
           child: Row(
             children: <Widget>[
               SizedBox(
@@ -363,6 +269,60 @@ class _ProductPage extends State<ProductPage>{
             ],
           )
         )
+            ],
+            ),
+            ),
+            
+            /*SizedBox(height: 20.0),
+        Padding(
+          padding: EdgeInsets.only(left: 15.0),
+          child: Text(
+            'COLOR',
+            style: TextStyle(
+                fontFamily: 'Raleway',
+                fontSize: 22.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+        SizedBox(height: 20.0),
+        Padding(
+          padding:  EdgeInsets.only(left: 15.0),
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+              width: 50.0,
+              height: 50.0,
+              child: new RaisedButton(
+                onPressed: () {},
+                color: Colors.black,
+                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+              ),
+            ),
+            SizedBox(width: 15.0),
+            SizedBox(
+              width: 50.0,
+              height: 50.0,
+              child: new RaisedButton(
+                onPressed: () {},
+                color: Colors.white,
+                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+              ),
+            ),
+            SizedBox(width: 15.0),
+            SizedBox(
+              width: 50.0,
+              height: 50.0,
+              child: new RaisedButton(
+                onPressed: () {}, 
+                color: Colors.red,
+                shape: CircleBorder(side: BorderSide(color: Colors.black)),
+              ),
+            )
+            ],
+          )
+        ),*/
           ],
         )
       ],
@@ -407,8 +367,8 @@ class _ProductPage extends State<ProductPage>{
               height: 50.0,
               child: new RaisedButton(
                 onPressed: () {},
-                child: Text('Add To Cart', style: TextStyle(color: Colors.black, fontSize:30),), 
-                color: Colors.yellow,
+                child: Text('Add To Cart', style: TextStyle(color: Colors.black, fontSize:14),), 
+                color: Colors.red,
                 //shape: StadiumBorder(side: BorderSide(color: Colors.black)),
               ),
             ),
