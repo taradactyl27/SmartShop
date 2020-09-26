@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './screens/Landing.dart';
 import './screens/ProductPage.dart';
-import './screens/Review.dart';
 import './screens/MainCart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert' show json, base64, ascii;
