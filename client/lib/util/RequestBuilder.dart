@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 
@@ -86,7 +87,7 @@ class RequestBuilder {
       );
     }
 
-    static Future<http.Response> changeStock(String id, List<Int> newStock) async {
+    static Future<http.Response> changeStock(String id, List<int> newStock) async {
       String input =
           "mutation {changeStock(itemId: \"" + id + "\", newStock: " + jsonEncode(newStock) + "){_id}}"
       ;
@@ -102,9 +103,9 @@ class RequestBuilder {
     }
 
 
-    static Future<http.Response> addItem(String name, Float price, String picture, List<Int> stock, String desc, String color) async {
+    static Future<http.Response> addItem(String name, Double price, String picture, List<int> stock, String desc, String color) async {
       String input =
-          "mutation {addItem(name: \""+ name + "\", price: \""+ price + "\", picture: \""+ picture + "\", stock: " + jsonEncode(stock) + 
+          "mutation {addItem(name: \""+ name + "\", price: \""+ price.toString() + "\", picture: \""+ picture + "\", stock: " + jsonEncode(stock) + 
            ", desc: \""+ desc + "\", color: \""+ color + "\"){_id}}"
       ;
       return http.post(
