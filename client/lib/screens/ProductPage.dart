@@ -19,8 +19,8 @@ class ProductPage extends StatefulWidget{
 class _ProductPage extends State<ProductPage>{
   @override
   void initState() {
-    String product_id = widget.product_id;
-    List<Map<String,int>> productIds= widget.productIds;
+    String product_id = widget.product_id != null ? widget.product_id : "";
+    List<Map<String,int>> productIds= widget.productIds != null ? widget.productIds : [];
     super.initState();
   }
   int photoIndex = 0;
@@ -33,8 +33,9 @@ class _ProductPage extends State<ProductPage>{
     print(this.widget.productIds);
     this.widget.productIds.add({this.widget.product_id: pickedSize});
     print(this.widget.productIds[this.widget.productIds.length-1]);
-    Navigator.pop(
-        context, this.widget.productIds
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(
+          builder: (context) => MainCart(productIdsList: this.widget.productIds))
         );
   }
   void _previousImage() {
