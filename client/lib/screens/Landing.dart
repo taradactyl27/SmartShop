@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../Animation/FadeAnimation.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 final storage = FlutterSecureStorage();
 const SERVER_IP = 'http://10.0.2.2:5000';
 class Landing extends StatefulWidget {
@@ -50,7 +51,7 @@ class _LandingState extends State<Landing>{
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xff121212),
+      //backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -61,14 +62,27 @@ class _LandingState extends State<Landing>{
                 Positioned(
                     child: FadeAnimation(
                   1,
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/banner.png"),
-                      ),
-                    ),
+                  ClipPath(
+                      clipper: WaveClipperTwo(),
+                      child: Container(
+                        height: 350.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(25.0),
+                            bottomRight: Radius.circular(25.0)),
+                          gradient: LinearGradient(
+                          colors: [
+                            //Color(0xFF80F9B7),
+                            //Color(0xFF9ABDEB),
+                            Color(0x99FC7B7B),
+                            Color(0x99A6C1FF),
+                          ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                 ),
+                ),
                   ),
+                    ),
                 )),
                 Positioned(
                 top: 60,
@@ -79,9 +93,29 @@ class _LandingState extends State<Landing>{
                     style: TextStyle(
                         fontFamily: 'Raleway',
                         fontSize: 44.0,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white)),
               )),
+              Positioned(
+                width: MediaQuery.of(context).size.width,
+                top: MediaQuery.of(context).size.width * 0.20,//TRY TO CHANGE THIS **0.30** value to achieve your goal 
+                child: Container(
+                  margin: EdgeInsets.all(16.0),
+                  child:Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset('assets/SmartShopping.png', scale: 0.35),
+                      ]
+                  ),
+                ))
+              /*Container(
+                  alignment: Alignment(10, 10),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/SmartShopping.png"),
+                          fit: BoxFit.cover
+                          )),
+              ),*///Container End
               ],
             ),
           ),
@@ -105,13 +139,13 @@ class _LandingState extends State<Landing>{
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
-                                color: Color(0xff3066BE),
+                                color: Color(0xffFC7B7B),
                               ),
                             ),
                           ),
                           child: TextField(
                             controller: _usercontroller,
-                            style: new TextStyle(color: Colors.white),
+                            style: new TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Username",
@@ -124,14 +158,14 @@ class _LandingState extends State<Landing>{
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
-                                color: Color(0xff3066BE),
+                                color: Color(0xffFC7B7B),
                               ),
                             ),
                           ),
                           child: TextField(
                             controller: _passwordcontroller,
                             obscureText: true,
-                            style: new TextStyle(color: Colors.white),
+                            style: new TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Password",
@@ -172,7 +206,7 @@ class _LandingState extends State<Landing>{
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color(0xff6FB6F6),
+                        color: Color(0xffFC7B7B),
                       ),
                       child: Center(
                         child: Text(
@@ -182,7 +216,7 @@ class _LandingState extends State<Landing>{
                             color: Colors.white),
                         ),
                       ),
-                    ),
+                    ),//Container
                   ),
                 ),
                 SizedBox(
@@ -214,7 +248,7 @@ class _LandingState extends State<Landing>{
                     margin: EdgeInsets.symmetric(horizontal: 40),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color(0xff6FB6F6),
+                      color: Color(0xffFC7B7B),
                     ),
                     child: Center(
                       child: Text(
