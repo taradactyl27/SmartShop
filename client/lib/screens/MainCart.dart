@@ -173,6 +173,7 @@ class _MainCart extends State<MainCart> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
+                          
                           Text('Total: \$' + totalAmount.toString()),
                           SizedBox(width: 10.0),
                           Padding(
