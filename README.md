@@ -1,1 +1,1 @@
-# hacknyu
+# sbuhacks
