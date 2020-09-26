@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import './MainCart.dart';
 import '../util/ProductJsonMapper.dart';
+import '../util/RequestBuilder.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class ProductPage extends StatefulWidget{
   final String product_id;
   List<Map<String,int>> productIds = [];
+  List<Product> products = [Product("", [0,0,0,0,0], "", "", "", "", 0.0)];
   ProductPage({Key key, @required this.product_id, @required this.productIds}) : super(key: key);
   @override
   _ProductPage createState()=>_ProductPage();
@@ -21,7 +24,18 @@ class _ProductPage extends State<ProductPage>{
   void initState() {
     String product_id = widget.product_id != null ? widget.product_id : "";
     List<Map<String,int>> productIds= widget.productIds != null ? widget.productIds : [];
-    super.initState();
+    if(product_id != null){
+      print("CHIEF KEEF");
+      List<Product> tempProductList;
+      Future<http.Response> queriedProducts = RequestBuilder.getItemsFromIdArray([product_id]);
+      queriedProducts.then((value) => {
+        setState(() {widget.products = ProductJsonMapper.fromJsonArray(jsonEncode(jsonDecode(value.body)["data"]));}),
+        //tempProductList = ProductJsonMapper.fromJsonArrayV2(value.body)
+        print("WIDGET DECODED"),
+      });
+      super.initState();
+      //return tempProductList;
+      }
   }
   int photoIndex = 0;
   int pickedSize = 0;
@@ -29,6 +43,11 @@ class _ProductPage extends State<ProductPage>{
   List picked = [true, false, false, false, false ];
   int previousPicked = 0;
   List<String> sizes = ['XS','S','M','L','XL'];
+  List<Product> generateProducts(String id) {
+       print("GENERATING PRODUCTS: ");
+      print(id); 
+      
+  }
   void cartHandler() {
     print(this.widget.productIds);
     this.widget.productIds.add({this.widget.product_id: pickedSize});
@@ -56,23 +75,6 @@ class _ProductPage extends State<ProductPage>{
       photoIndex = photoIndex < photos.length - 1 ? photoIndex + 1 : photoIndex;
     });
   }
-
-  List<Product> products = ProductJsonMapper.fromJsonArray('''{
-      "products": [{
-          "id": "5f6eb803db6c2e1eee7d31af",
-          "stock": [
-            1,
-            0,
-            3,
-            4,
-            5
-          ],
-          "name": "Low-Cut Tshirt",
-          "price": 7.99,
-          "picture": "tshirt.jpg",
-          "desc": "Elevate your tee rotation with ease thanks to these amazing low-cut T-Shirts. This essential pack includes three tees that each have crew neck, a soft cotton fabrication, and a scallop hem for added coverage.A set of three soft cotton tees in our signature curved hem silhouette with longer length, featuring a crewneck, icon at left chest and short sleeves. Slim Fit. Imported.",
-          "color": "black"
-      }]}''');
   int getColorHexFromStr(String colorStr) {
     colorStr = "FF" + colorStr;
     colorStr = colorStr.replaceAll("#", "");
@@ -112,7 +114,7 @@ class _ProductPage extends State<ProductPage>{
                   decoration: BoxDecoration(
                       color: Colors.white,
                       image: DecorationImage(
-                          image: AssetImage("assets/" + products[0].picture),
+                          image: widget.products != null ? AssetImage("assets/" + widget.products[0].picture) : "",
                           fit: BoxFit.contain)),
                 ),
                 GestureDetector(
@@ -196,7 +198,7 @@ class _ProductPage extends State<ProductPage>{
                  Positioned(
                     top: 45,
                     left: 15,
-                    child: Text(products[0].name,
+                    child: Text(widget.products[0].name,
                     style: TextStyle(
                       fontFamily: 'Raleway',
                       fontSize: 25.0,
@@ -212,7 +214,7 @@ class _ProductPage extends State<ProductPage>{
                       children: <Widget>[
                         Container(
                           width: (MediaQuery.of(context).size.width / 4 + MediaQuery.of(context).size.width / 2) - 10.0,
-                          child: Text( products[0].desc,
+                          child: Text( widget.products[0].desc,
                           style: TextStyle(
                             fontFamily: 'Raleway',
                             fontSize: 13.0,
@@ -222,7 +224,7 @@ class _ProductPage extends State<ProductPage>{
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: Text('\$' + products[0].price.toString(),
+                          child: Text('\$' + widget.products[0].price.toString(),
                             style: TextStyle(
                               fontFamily: 'Raleway',
                               fontSize: 25.0,
@@ -256,7 +258,7 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: products[0].stock[0] > 0 ? () => pickToggle(0) : null,
+                onPressed: widget.products[0].stock[0] > 0 ? () => pickToggle(0) : null,
                 child: Text('XS', style: TextStyle(
                   fontFamily: "Raleway",
                   color: picked[0] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
@@ -269,7 +271,7 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: products[0].stock[1] > 0 ? () => pickToggle(1) : null,
+                onPressed: widget.products[0].stock[1] > 0 ? () => pickToggle(1) : null,
                 child: Text('S', style: TextStyle(
                   fontFamily: "Raleway",
                   color: picked[1] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
@@ -282,7 +284,7 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: products[0].stock[2] > 0 ? () => pickToggle(2) : null,
+                onPressed: widget.products[0].stock[2] > 0 ? () => pickToggle(2) : null,
                 child: Text('M', style: TextStyle(
                   fontFamily: "Raleway",
                   color: picked[2] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
@@ -295,7 +297,7 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: products[0].stock[3] > 0 ? () => pickToggle(3) : null,
+                onPressed: widget.products[0].stock[3] > 0 ? () => pickToggle(3) : null,
                 child: Text('L', style: TextStyle(
                   fontFamily: "Raleway",
                   color: picked[3] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
@@ -308,7 +310,7 @@ class _ProductPage extends State<ProductPage>{
               width: 50.0,
               height: 50.0,
               child: new RaisedButton(
-                onPressed: products[0].stock[4] > 0 ? () => pickToggle(4) : null,
+                onPressed: widget.products[0].stock[4] > 0 ? () => pickToggle(4) : null,
                 child: Text('XL', style: TextStyle(
                   fontFamily: "Raleway",
                   color: picked[4] ? Colors.black : Colors.grey.withOpacity(0.4)),), 
