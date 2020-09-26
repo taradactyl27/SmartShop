@@ -95,7 +95,7 @@ var queryType = new GraphQLObjectType({
                 }
             },
 
-            item: {
+            getItemById: {
                 type: itemType,
                 args: {
                     id: {
@@ -105,6 +105,22 @@ var queryType = new GraphQLObjectType({
                 },
                 resolve: function (root, params) {
                     const itemDetails = ItemModel.findById(params.id).exec()
+                    if (!itemDetails) {
+                        throw new Error('Error')
+                    }
+                    return itemDetails
+                }
+            },
+            getItemsByName: {
+                type: new GraphQLList(itemType),
+                args: {
+                    name: {
+                        name: 'name',
+                        type: GraphQLString
+                    }
+                },
+                resolve: function (root, params) {
+                    const itemDetails = ItemModel.find({name: params.name}).exec()
                     if (!itemDetails) {
                         throw new Error('Error')
                     }
