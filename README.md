@@ -1,2 +1,6 @@
 # SmartShop
-## Alex Taradachuk, Valentine Shidlovskiy, Michael Arkhangelsky, Vladimir Andreev
+Alex Taradachuk, Valentine Shidlovskiy, Michael Arkhangelsky, Vladimir Andreev
+## Inspiration
+Covid-19 had such a large social impact, our society has come to adapt to social distancing and increased health awareness. Instead of displaying duplicates of items in stores, clothing stores would instead become showroom style. Crowded stores, product clutter and uncleanliness are something that everyone has experienced before when shopping. Many people are fortunate enough to be able to purchase online and get a product that fits perfectly. Other people prefer to go in store and view the product in person to alleviate the hassle of returning items they do not like/want. Anyone that goes into contact with people is at most risk for Covid-19.
+## What It Does
+Our product is a means to keep people safe, and change the way we shop. When someone sees a product they like, they can easily scan a QR code and a worker will automatically retrieve it (no contact required). It eliminates the need for in person shopping carts, and allows customers to move freely around the store. Our app has a built in shopping cart which will be brought out when the shopper has finished browsing and they want to checkout. This overall reduces the amount of contact with your potential item thus lowering your risk of getting Covid-19.
